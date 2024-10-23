@@ -14,7 +14,7 @@ class MySubscriber : public rclcpp::Node
 {
 public:
     MySubscriber()
-        : Node("my_subscriber")
+        : Node("serial_send_node")
     {
         subscription_ = this->create_subscription<geometry_msgs::msg::Twist>(
             "cmd_vel", 10, std::bind(&MySubscriber::topic_callback, this, _1));
@@ -23,14 +23,13 @@ public:
 private:
     void topic_callback(const geometry_msgs::msg::Twist::SharedPtr msg) const
     {
-        char buf[64]; // メッセージのバッファーサイズを適切に制限
+        char buf[128];
         unsigned int bytes_written;
 
         RCLCPP_INFO(this->get_logger(), "I heard: '%lf'", msg->linear.x);
 
         // メッセージをバッファに書き込む
-        // bytes_written = snprintf(buf, sizeof(buf), "%7.5f,%7.5f\n", msg->linear.x, msg->angular.z);
-        bytes_written = snprintf(buf, sizeof(buf), "%7.3f,%7.3f,%7.3f,%7.3f\n", msg->linear.x, msg->angular.z, msg->angular.x, msg->angular.y);
+        bytes_written = snprintf(buf, sizeof(buf), "%7.3f,%7.3f,%7.3f,%7.3f,%7.3f,%7.3f,\0", msg->linear.x,msg->linear.y,msg->linear.z,msg->angular.x,msg->angular.y,msg->angular.z);
 
 
         if (bytes_written > sizeof(buf)) {
@@ -75,7 +74,8 @@ int main(int argc, char **argv)
     rclcpp::init(argc, argv);
     auto node = std::make_shared<rclcpp::Node>("Serialport");
 
-    char device_name[] = "/dev/arduino-mega";
+    std::string dev_name = this->get_parameter("device_name").as_string();
+    char device_name[] = dev_name;
     fd1 = open_serial(device_name);
 
     if (fd1 < 0) {

@@ -10,14 +10,20 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 
 ## set target
 set(NODES serial_receive_node;serial_send_node)
 foreach(target IN LISTS NODES)
   add_executable(${target} src/${target}.cpp)
-  ament_target_dependencies(${target} rclcpp std_msgs geometry_msgs)
+  ament_target_dependencies(${target} rclcpp std_msgs geometry_msgs nav_msgs)
   install(TARGETS ${target} DESTINATION lib/${PROJECT_NAME})
 endforeach()
+
+install(
+  DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}/
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
