@@ -28,5 +28,10 @@
         "/home/tomo/ros2_ws/install/drive_base_msgs/lib/python3.8/site-packages",
         "/home/tomo/ros2_ws/install/amcl_subscriber/lib/python3.8/site-packages",
         "/opt/ros/foxy/lib/python3.8/site-packages"
-    ]
+    ],
+    "files.associations": {
+        "array": "cpp",
+        "string": "cpp",
+        "string_view": "cpp"
+    }
 }

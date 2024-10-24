@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>ros2serial_arduino</name>
+  <name>ros2serial_odom</name>
   <version>0.0.0</version>
-  <description>Package to send and receive data using serial communication between ROS 2 node and Arduino Mega</description>
-  <maintainer email="whowillcatchatastraw@gmail.com">tomoswifty</maintainer>
+  <description>Package to send and receive /odom using serial communication between ROS 2 node and Serial Port</description>
+  <maintainer email="oku_dan411@yahoo.co.jp">tomoswifty</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

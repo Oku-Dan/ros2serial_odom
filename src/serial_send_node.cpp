@@ -6,6 +6,8 @@
 #include <fcntl.h>
 #include <termios.h>
 
+#define DEVICE_NAME "/dev/ttyUSB0"
+
 using std::placeholders::_1;
 
 int fd1;
@@ -26,11 +28,10 @@ private:
         char buf[128];
         unsigned int bytes_written;
 
-        RCLCPP_INFO(this->get_logger(), "I heard: '%lf'", msg->linear.x);
-
         // メッセージをバッファに書き込む
-        bytes_written = snprintf(buf, sizeof(buf), "%7.3f,%7.3f,%7.3f,%7.3f,%7.3f,%7.3f,\0", msg->linear.x,msg->linear.y,msg->linear.z,msg->angular.x,msg->angular.y,msg->angular.z);
+        bytes_written = snprintf(buf, sizeof(buf), "%7.3f,%7.3f,%7.3f,%7.3f,%7.3f,%7.3f,\n", msg->linear.x,msg->linear.y,msg->linear.z,msg->angular.x,msg->angular.y,msg->angular.z);
 
+        RCLCPP_INFO(this->get_logger(), "send: '%s'",buf);
 
         if (bytes_written > sizeof(buf)) {
             RCLCPP_ERROR(this->get_logger(), "Serial Fail: message formatting error");
@@ -74,8 +75,7 @@ int main(int argc, char **argv)
     rclcpp::init(argc, argv);
     auto node = std::make_shared<rclcpp::Node>("Serialport");
 
-    std::string dev_name = this->get_parameter("device_name").as_string();
-    char device_name[] = dev_name;
+    char device_name[] = DEVICE_NAME;
     fd1 = open_serial(device_name);
 
     if (fd1 < 0) {
